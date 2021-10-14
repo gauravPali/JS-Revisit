@@ -6,6 +6,7 @@ let p1 = new Promise(function (resolve, reject) {
         reject(new Error('I am wrong'));
     }, 10000)
 })
+//
 
 // consumer code
 // then :- Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -22,6 +23,7 @@ p1.then(null, function (err) {
 })
 p1.catch((err) => console.log(err));
 
+//
 
 new Promise((resolve, reject) => {
     setTimeout(() => resolve('I am resolved'), 2000);
@@ -31,13 +33,11 @@ new Promise((resolve, reject) => {
     .then((res) => console.log('then executing', res))
     .catch((err) => console.log('catch executing', err))
 
-// result
-// then executing I am resolved
-// finally executing
-// then executing 5
+// Output : then executing I am resolved
+//          finally executing
+//          then executing 5
 
 // A handler, used in .then(handler) may create and return a promise.
-
 // If we throw inside .catch, then the control goes to the next closest error handler
 // the execution: catch -> then
 new Promise((resolve, reject) => {
@@ -53,7 +53,6 @@ let urls = [
     'https://api.github.com/users/remy',
     'https://api.github.com/users/jeresig'
 ];
-
 // ajax 1
 // ajax 2
 // ajax 3
@@ -74,23 +73,16 @@ fetch(urls[0]).then(res => {
     console.log('url 3', res);
 })
 
-
 Promise.all([fetch(urls[0]), fetch(urls[1]), fetch(urls[2])]).then((res) => console.log(res));
 
 
 
 let names = ['iliakan', 'remy', 'jeresig'];
-
 let requests = names.map(name => fetch(`https://api.github.com/users/${name}`));
-
 let names = ['iliakan', 'remy', 'jeresig'];
-
 let requests = names.map(name => fetch(`https://api.github.com/users/${name}`));
-
 let names = ['iliakan', 'remy', 'jeresig'];
-
 let requests = names.map(name => fetch(`https://api.github.com/users/${name}`));
-
 Promise.all(requests)
     .then(responses => {
         // all responses are resolved successfully
@@ -107,10 +99,72 @@ Promise.all(requests)
 
 
 var delay = 2000;
-let timer = setInterval(function(){
+let timer = setInterval(function () {
     console.log('i am set interval\n');
     delay = 10000;
-},delay)
+}, delay)
 
 
+// difference in callbacks and promises 
+function multiply(a, b, c1, c2) {
+    let result = a * b;
+    if (result >= 100) {
+        res = c1(result);
+        if (c >= 1000) {
+            result = c2(res);
+        }
+    }
+}
+function makeItTwice(num) {
+    return 2 * num;
+}
+function makeItZero(num) {
+    return 0;
+}
+multiply(10, 180, makeItTwice, makeItZero);
 
+c = new Promise((res, rej) => {
+    res(10 * 180);
+}).then(res => {
+    return res * 2;
+}).then(res => {
+    return res * 0;
+})
+//
+
+//--------------------------------//
+c =  new Promise((res,rej)=>{
+    setTimeout(()=>{
+        res({name:'Gaurav'});
+    },2000)
+}).then((user) =>{
+    return new Promise((res,rej)=>{
+        setTimeout(()=>{
+            res({id:'3332'});
+        },2000)
+    })
+}).then(id =>{
+    console.log(id);
+})
+
+c1 =  new Promise((res,rej)=>{
+    setTimeout(()=>{
+        res({name:'Gaurav'});
+    },20000)
+}).then(user =>{
+    return new Promise((res,rej)=>{
+        setTimeout(()=>{
+            res({id:'3332'});
+        },2000)
+    }).then((id)=>{
+        return {
+            ...id,...user
+        }
+    })
+})
+
+c3 = Promise.resolve({name:'Gaurav'})
+     .then(user => {
+         return Promise.resolve({id:3332}).then(id => Promise.resolve({...user,...id}))
+     })    
+//--------------------------------//     
