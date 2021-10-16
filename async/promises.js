@@ -166,5 +166,34 @@ c1 =  new Promise((res,rej)=>{
 c3 = Promise.resolve({name:'Gaurav'})
      .then(user => {
          return Promise.resolve({id:3332}).then(id => Promise.resolve({...user,...id}))
-     })    
+     })        
 //--------------------------------//     
+
+
+//----------------------------------//
+function consoleMe(msg){
+    msg = msg || 'console';
+    console.log(msg);
+}
+
+function alertMe(msg){
+    msg = msg || 'Alert';
+    alert(msg);
+}
+
+new Promise(function(res,rej){
+    res('I am there');
+})
+.then(function(res){
+    console.log(res);
+},function(err){
+    alert(err);
+})
+
+// Passing only function name
+new Promise(function(resolve,reject){
+    resolve('I am there');
+})
+.then(consoleMe,alertMe);
+
+//------------------------------------------//
